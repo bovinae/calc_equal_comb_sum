@@ -91,7 +91,7 @@ void split(char *buf, double** data, int row) {
 int writeFile(const char* fileName, const char* str) {
     FILE *fp;
 
-    fp = fopen(fileName, "w");
+    fp = fopen(fileName, "aw");
     if (fp == NULL) {
         printf("open file failed!\n");
         return -1;

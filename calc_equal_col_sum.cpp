@@ -13,6 +13,8 @@
 
 using namespace std;
 
+string resultFile = "result.txt";
+
 typedef struct DataWithPos
 {
   double data;
@@ -43,6 +45,7 @@ std::string toString(DataWithPos* d, vector<int>& v) {
     }
   }
   
+  printf("end toString: %s\n", ss.str().c_str());
   return ss.str();
 }
 
@@ -84,12 +87,12 @@ void recurse(DataWithPos* d, double **mat, int row, int target, vector<int>& lhs
   //   printVector("lhs", lhs);
   //   printVector("rhs", rhs);
   // }
-  if (target < 0 || begin < 0) return ;
+  if (target < 0) return ;
   if (target == 0) {
     if (checkResult(d, mat, row, lhs, rhs)) {
       char out[1024];
       sprintf(out, "%s = %s\n", toString(d, lhs).c_str(), toString(d, rhs).c_str());
-      writeFile("result.txt", out);
+      writeFile(resultFile.c_str(), out);
     }
     return ;
   }
@@ -166,7 +169,10 @@ int main(int argc, char** argv)
   clock_t begin = clock();
   if (argc == 2) {
     mat = readFile1(argv[1], row, col);
-  } else {
+  } else if (argc == 3) {
+    resultFile = argv[2];
+    mat = readFile1(argv[1], row, col);
+  }else {
     mat = readFile1("data/data1.tsv", row, col);
   }
   costtime(begin);
@@ -209,7 +215,7 @@ int main(int argc, char** argv)
 
 /*
 14.32 prune to 4
-local col sum data1.tsv
+14.36 col sum data1.tsv
 14.35 col sum data2.tsv
 14.34 col sum data3.tsv
 */
