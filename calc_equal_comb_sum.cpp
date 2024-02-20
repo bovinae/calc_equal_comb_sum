@@ -84,7 +84,7 @@ void find(DataWithPos* d, double **mat, int row, int col) {
   sysinfo(&si);
   printf("total available ram: %ld\n", si.totalram);
 
-  for (int k = 0; k < col; k += 24) {
+  for (int k = 0; k < col; k += 36) {
     clock_t begin = clock();
     printf("processing col: %d\n", k);
     map<size_t, size_t> result;
@@ -93,7 +93,7 @@ void find(DataWithPos* d, double **mat, int row, int col) {
     std::vector<double> walk{0};
     walk.reserve(16*1024*1024);
     // printf("sizeof walk:%ld, %f\n", walk.size(), walk[0]);
-    for (int i = k; i < k+24; i++) {
+    for (int i = k; i < k+36; i++) {
       // printf("processing col: %d\n", i);
       size_t len = walk.size();
       for(size_t j = 0; j < len; j++){
