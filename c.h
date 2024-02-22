@@ -52,6 +52,32 @@ double** readFile1(const char* fileName, int& row, int& col) {
     return data;
 }
 
+int getRowCol(const char* fileName, int& row, int& col) {
+    FILE *fp;
+
+    fp = fopen(fileName, "r");
+    if (fp == NULL) {
+        printf("open file failed!\n");
+        return -1;
+    }
+
+    char buf[64];
+    if (fgets(buf, sizeof(buf), fp) == NULL) return -1;
+    char sep[] = "\t";
+    char* s1 = NULL;
+    int cnt = 0;
+    for (s1 = strtok(buf, sep); s1 != NULL; s1 = strtok(NULL, sep)) {
+      if (cnt == 0) row = atoi(s1);
+      else if (cnt == 1) col = atoi(s1);
+      cnt++;
+    }
+    printf("row=%d, col=%d\n", row, col);
+
+    fclose(fp);
+
+    return 0;
+}
+
 int readFile(const char* fileName, double** data) {
     FILE *fp;
 
