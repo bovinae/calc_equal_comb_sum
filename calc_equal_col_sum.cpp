@@ -82,13 +82,13 @@ double accuSum(DataWithPos *d, vector<int>& v) {
   return sum;
 }
 
-void recurse(DataWithPos* d, double **mat, int row, int target, vector<int>& lhs, unordered_map<int, bool>& lhsMap, vector<int>& rhs, int begin) {
+void recurse(DataWithPos* d, double **mat, int row, double target, vector<int>& lhs, unordered_map<int, bool>& lhsMap, vector<int>& rhs, int begin) {
   // if (target <= 0) {
   //   printVector("lhs", lhs);
   //   printVector("rhs", rhs);
   // }
   if (target < 0) return ;
-  if (target == 0) {
+  if (fabs(target) < 0.000001) {
     if (checkResult(d, mat, row, lhs, rhs)) {
       char out[1024];
       sprintf(out, "%s = %s\n", toString(d, lhs).c_str(), toString(d, rhs).c_str());
