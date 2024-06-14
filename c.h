@@ -270,3 +270,66 @@ void colCorrCluster(std::vector<std::vector<T>> &mat, vector<vector<int>>& corr)
     corr.push_back(tmp);
   }
 }
+
+template <class T>
+void colCorrCluster(std::vector<std::vector<T>> &mat, vector<vector<unordered_set<int>>>& clusters) {
+  if(mat.size() == 0) {
+    std::cout<<"the size of the mat is 0\n";
+    return ;
+  }
+
+  double corrThreshold = 0.35;
+  for (int i = 0; i < mat.size()-1; i++) {
+    cout << "processing col: " << i << endl;
+    for (int j = i+1; j < mat.size(); j++) {
+      double corr = pearson(mat[i], mat[j]);
+      if (corr < corrThreshold && corr > -corrThreshold) continue;
+      bool exists = false;
+      for (auto &curr : clusters) {
+        if (curr[0].size() > 0 && curr[0].find(i) != curr[0].end()) {
+          if (corr > 0) {
+            curr[1].insert(j);
+          } else {
+            curr[0].insert(j);
+          }
+          exists = true;
+        } else if (curr[0].size() > 0 && curr[0].find(j) != curr[0].end()) {
+          if (corr > 0) {
+            curr[1].insert(i);
+          } else {
+            curr[0].insert(i);
+          }
+          exists = true;
+        } else {
+          if (curr[1].size() > 0 && curr[1].find(i) != curr[1].end()) {
+            if (corr > 0) {
+              curr[0].insert(j);
+            } else {
+              curr[1].insert(j);
+            }
+            exists = true;
+          } else if (curr[1].size() > 0 && curr[1].find(j) != curr[1].end()) {
+            if (corr > 0) {
+              curr[0].insert(i);
+            } else {
+              curr[1].insert(i);
+            }
+            exists = true;
+          }
+        }
+        if (exists) break;
+      }
+      if (!exists) {
+        vector<unordered_set<int>> tmp(2, unordered_set<int>{});
+        if (corr > 0) {
+          tmp[0].insert(i);
+          tmp[1].insert(j);
+        } else {
+          tmp[0].insert(i);
+          tmp[0].insert(j);
+        }
+        clusters.push_back(tmp);
+      }
+    }
+  }
+}
